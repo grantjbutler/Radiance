@@ -37,6 +37,23 @@ class API_Color:
         web.ctx['callback_queue'].put(plasma.leds.show);
         return json.dumps({ 'status': 'OK' })
 
+class API_Brightness:
+    def GET(self):
+        web.header('Content-Type', 'text/plain')
+        
+        plasma = web.ctx['plasma']
+        return plasma.brightness
+    
+    def POST(self):
+        web.header('Content-Type', 'application/json')
+        
+        brightness = int(web.data())
+        plasma = web.ctx['plasma']
+        plasma.brightness = min(100, max(0, brightness))
+        web.ctx['callback_queue'].put(plasma.leds.show);
+        return json.dumps({ 'status': 'OK' })
+        
+
 class Server:
     def run(self):
         self.find_plasma_trim()
@@ -66,7 +83,8 @@ class Server:
         
         urls = (
             '/', 'Home',
-            '/api/color', 'API_Color' 
+            '/api/color', 'API_Color',
+            '/api/brightness', 'API_Brightness'
         )
         self.app = web.application(urls, globals())
         self.app.add_processor(web.loadhook(self.load_plasma_trim))
