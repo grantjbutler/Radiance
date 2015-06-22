@@ -1,6 +1,8 @@
 import socket
 import os
 import json
+from threading import Thread
+import Queue
 
 import plasmatrim
 import web
@@ -32,7 +34,7 @@ class API_Color:
         for i, led in enumerate(plasma.leds):
             for j, index in enumerate(led):
                 led[j] = color[j]
-        plasma.leds.show()
+        web.ctx['callback_queue'].put(plasma.leds.show);
         return json.dumps({ 'status': 'OK' })
 
 class Server:
@@ -40,6 +42,7 @@ class Server:
         self.find_plasma_trim()
         self.register_service()
         self.run_web_server()
+        self.write_plasma_trim_changes()
     
     def find_plasma_trim(self):
         plasmas = plasmatrim.find()
@@ -68,13 +71,25 @@ class Server:
         self.app = web.application(urls, globals())
         self.app.add_processor(web.loadhook(self.load_plasma_trim))
         self.app.add_processor(web.loadhook(self.load_renderer))
-        self.app.run()
+        self.app.add_processor(web.loadhook(self.load_main_thread_queue))
+        
+        self.web_server_thread = Thread(None, self.app.run)
+        self.web_server_thread.start()
+    
+    def write_plasma_trim_changes(self):
+        self.callback_queue = Queue.Queue()
+        while True:
+            callback = self.callback_queue.get()
+            callback()
     
     def load_plasma_trim(self):
         web.ctx['plasma'] = self.plasma
     
     def load_renderer(self):
         web.ctx['render'] = self.render
+    
+    def load_main_thread_queue(self):
+        web.ctx['callback_queue'] = self.callback_queue
 
 if __name__ == "__main__":
     Server().run()
