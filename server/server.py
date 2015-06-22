@@ -95,6 +95,7 @@ class Server:
         self.web_server_thread.start()
     
     def write_plasma_trim_changes(self):
+        signal.signal(signal.SIGINT, self.handle_ctrl_c)
         self.callback_queue = Queue.Queue()
         while True:
             callback = self.callback_queue.get()
@@ -108,6 +109,10 @@ class Server:
     
     def load_main_thread_queue(self):
         web.ctx['callback_queue'] = self.callback_queue
+    
+    def handle_ctrl_c(self):
+        print "Exiting"
+        sys.exit(0)
 
 if __name__ == "__main__":
     Server().run()
