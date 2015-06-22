@@ -99,7 +99,10 @@ class Server:
         signal.signal(signal.SIGINT, self.handle_ctrl_c)
         self.callback_queue = Queue.Queue()
         while True:
-            callback = self.callback_queue.get()
+            try:
+                callback = self.callback_queue.get(False)
+            except Queue.Empty:
+                continue
             callback()
     
     def load_plasma_trim(self):
@@ -111,7 +114,7 @@ class Server:
     def load_main_thread_queue(self):
         web.ctx['callback_queue'] = self.callback_queue
     
-    def handle_ctrl_c(self):
+    def handle_ctrl_c(self, signal, frame):
         print "Exiting"
         sys.exit(0)
 
