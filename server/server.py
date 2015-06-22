@@ -55,7 +55,7 @@ class Server:
         if split_index > 0:
             hostname = hostname[:split_index]
         name = str("%s.%s") % (hostname, type)
-        self.service = ServiceInfo(type, name, socket.inet_aton(ip_address), 8080)
+        self.service = ServiceInfo(type, name, socket.inet_aton(ip_address), 8080, 0, 0, str())
         
         self.zeroconf = Zeroconf()
         self.zeroconf.register_service(self.service)
