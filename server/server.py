@@ -73,10 +73,10 @@ class Server:
         self.app.run()
     
     def load_plasma_trim(self):
-        web.ctx.plasma = self.plasma
+        web.ctx['plasma'] = self.plasma
     
     def load_renderer(self):
-        web.ctx.render = self.render
+        web.ctx['render'] = self.render
 
 if __name__ == "__main__":
     Server().run()
