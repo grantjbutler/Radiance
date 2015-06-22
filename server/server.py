@@ -8,16 +8,16 @@ from zeroconf import Zeroconf, ServiceInfo
 
 class Home:
     def GET(self):
-        plasma = web.ctx.plasma
+        plasma = web.ctx.['plasma']
         led = plasma.leds[0]
         color = [ led[0], led[1], led[2] ]
-        return web.ctx.render.index(color)
+        return web.ctx['render'].index(color)
 
 class API_Color:
     def GET(self):
         web.header('Content-Type', 'application/json')
         
-        plamsa = web.ctx.plasma
+        plamsa = web.ctx['plasma']
         led = plasma.leds[0]
         color = [ led[0], led[1], led[2] ]
         return json.dumps(color)
@@ -25,7 +25,7 @@ class API_Color:
     def POST(self):
         web.header('Content-Type', 'application/json')
         
-        plasma = web.ctx.plasma
+        plasma = web.ctx['plasma']
         color = json.loads(web.data())
         if len(color) != 3:
             return json.dumps({ 'status': 'Error', 'error': 'Invalid number of colors. Should be 3 (rgb)' })
