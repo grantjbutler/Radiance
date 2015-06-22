@@ -1,0 +1,3 @@
+[submodule "server/plasmatrim"]
+	path = server/plasmatrim
+	url = https://github.com/svirpridon/plasmatrim.git
