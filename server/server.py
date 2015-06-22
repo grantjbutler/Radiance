@@ -3,6 +3,7 @@ import os
 import json
 from threading import Thread
 import Queue
+import signal
 
 import plasmatrim
 import web
@@ -34,7 +35,7 @@ class API_Color:
         for i, led in enumerate(plasma.leds):
             for j, index in enumerate(led):
                 led[j] = color[j]
-        web.ctx['callback_queue'].put(plasma.leds.show);
+        web.ctx['callback_queue'].put(plasma.leds.show)
         return json.dumps({ 'status': 'OK' })
 
 class API_Brightness:
@@ -50,7 +51,7 @@ class API_Brightness:
         brightness = int(web.data())
         plasma = web.ctx['plasma']
         plasma.brightness = min(100, max(0, brightness))
-        web.ctx['callback_queue'].put(plasma.leds.show);
+        web.ctx['callback_queue'].put(plasma.leds.show)
         return json.dumps({ 'status': 'OK' })
         
 
