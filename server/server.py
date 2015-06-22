@@ -8,7 +8,7 @@ from zeroconf import Zeroconf, ServiceInfo
 
 class Home:
     def GET(self):
-        plasma = web.ctx.['plasma']
+        plasma = web.ctx['plasma']
         led = plasma.leds[0]
         color = [ led[0], led[1], led[2] ]
         return web.ctx['render'].index(color)
