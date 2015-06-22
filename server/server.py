@@ -17,7 +17,7 @@ class API_Color:
     def GET(self):
         web.header('Content-Type', 'application/json')
         
-        plamsa = web.ctx['plasma']
+        plasma = web.ctx['plasma']
         led = plasma.leds[0]
         color = [ led[0], led[1], led[2] ]
         return json.dumps(color)
