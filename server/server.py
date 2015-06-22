@@ -26,6 +26,7 @@ class API_Color:
         web.header('Content-Type', 'application/json')
         
         plasma = web.ctx['plasma']
+        print web.data()
         color = json.loads(web.data())
         if len(color) != 3:
             return json.dumps({ 'status': 'Error', 'error': 'Invalid number of colors. Should be 3 (rgb)' })
