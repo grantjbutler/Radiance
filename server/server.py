@@ -49,7 +49,13 @@ class Server:
     
     def register_service(self):
         ip_address = socket.gethostbyname(socket.gethostname())
-        self.service = ServiceInfo("_radiance._tcp.local.", "Radiance._radiance._tcp.local.", socket.inet_aton(ip_address), 8080)
+        type = "_radiance._tcp.local."
+        hostname = socket.gethostname()
+        split_index = hostname.find(".local")
+        if split_index > 0:
+            hostname = hostname[:split_index]
+        name = str("%s.%s") % (hostname, type)
+        self.service = ServiceInfo(type, name, socket.inet_aton(ip_address), 8080)
         
         self.zeroconf = Zeroconf()
         self.zeroconf.register_service(self.service)
