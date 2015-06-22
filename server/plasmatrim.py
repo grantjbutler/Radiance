@@ -440,7 +440,7 @@ class PlasmaTrim(object):
                 return reply[1:]
             except _TimeoutError:
                 print("IO timed out, try #%d." % attempt)
-                time.sleep(0.000001)
+#                time.sleep(0.000001)
             finally:
                 signal.signal(signal.SIGALRM, handler)
         msg = "Gving up on PlasmaTrim {}"
