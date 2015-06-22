@@ -26,15 +26,12 @@ class API_Color:
         web.header('Content-Type', 'application/json')
         
         plasma = web.ctx['plasma']
-        print web.data()
         color = json.loads(web.data())
         if len(color) != 3:
             return json.dumps({ 'status': 'Error', 'error': 'Invalid number of colors. Should be 3 (rgb)' })
         for i, led in enumerate(plasma.leds):
-            led = plasma.leds[i]
-            led[0] = color[0]
-            led[1] = color[1]
-            led[2] = color[2]
+            for j, index in enumerate(led):
+                led[j] = color[j]
         plasma.leds.show()
         return json.dumps({ 'status': 'OK' })
 
