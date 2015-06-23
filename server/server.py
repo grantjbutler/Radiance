@@ -4,6 +4,7 @@ import json
 from threading import Thread
 import Queue
 import signal
+import sys
 
 import plasmatrim
 import web
